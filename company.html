@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your company</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        img#preview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #employee-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #employee-list li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="text"]#employee-name,
+        input[type="text"]#employee-search {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h1>Create Your Company</h1>
+
+        <!-- Company Name -->
+        <label for="company-name">Company name:</label>
+        <input type="text" id="company-name" placeholder="Enter company name">
+        <label for="company-id">Company ID:</label>
+        <input type="text" id="company-id" placeholder="Enter company ID">
+        <label for="company-desc">Company description:</label>
+        <input type="text" id="company-desc" placeholder="Enter company description">
+
+        <!-- Company Picture -->
+        <label for="company-logo">Company Logo:</label>
+        <input type="file" id="company-logo" accept="image/*">
+
+        <!-- Add Employee Section -->
+        <h2>Add Employees</h2>
+        <label for="employee-name">Employee Name:</label>
+        <input type="text" id="employee-name" placeholder="Enter employee name">
+        <button onclick="addEmployee()">Add Employee</button>
+
+        <!-- Display Company Employees -->
+        <h2>Company Employees</h2>
+        <ul id="employee-list"></ul>
+
+        <!-- Submit Button -->
+        <button onclick="submitCompany()">Submit</button>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-database.js"></script>
+
+    <script>
+        // Replace with your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHXbGjCTkH5X-N9T20s7PEhiZwUmGYt6A",
+            projectId: "pyrank-7e5de",
+            authDomain: "pyrank-7e5de.firebaseapp.com",
+            databaseURL: "https://pyrank-7e5de-default-rtdb.firebaseio.com",
+            storageBucket: "pyrank-7e5de.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Function to add an employee to the list
+        function addEmployee() {
+            const employeeName = document.getElementById('employee-name').value;
+            const employeeList = document.getElementById('employee-list');
+
+            if (employeeName) {
+                const listItem = document.createElement('li');
+                listItem.textContent = employeeName;
+                employeeList.appendChild(listItem);
+
+                // Reset the employee name input field
+                document.getElementById('employee-name').value = '';
+            } else {
+                alert('Please enter an employee name.');
+            }
+        }
+
+        // Function to submit company information to the database
+        function submitCompany() {
+            const companyName = document.getElementById('company-name').value;
+            const logoInput = document.getElementById('company-logo');
+            const logoFile = logoInput.files[0];
+            const employeeListItems = document.getElementById('employee-list').getElementsByTagName('li');
+
+            if (companyName && logoFile && employeeListItems.length > 0) {
+                const storageRef = firebase.storage().ref(`company-logos/${logoFile.name}`);
+                const databaseRef = firebase.database().ref('companies');
+
+                // Upload logo to storage
+                storageRef.put(logoFile).then((snapshot) => {
+                    // Get the download URL for the logo
+                    snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        // Save company information to the database
+                        const companyData = {
+                            name: companyName,
+                            logo: downloadURL,
+                            employees: []
+                        };
+
+                        // Add employees to the company data
+                        for (let i = 0; i < employeeListItems.length; i++) {
+                            companyData.employees.push(employeeListItems[i].textContent);
+                        }
+
+                        databaseRef.push(companyData);
+
+                        // Reset form fields
+                        document.getElementById('company-name').value = '';
+                        logoInput.value = '';
+                        document.getElementById('preview').src = '';
+                        document.getElementById('employee-list').innerHTML = '';
+                        document.getElementById('employee-name').value = '';
+
+                        alert('Company information submitted successfully!');
+
+                        // Redirect to the main page (index.html)
+                        window.location.replace = 'index.html';
+                    });
+                });
+            } else {
+                alert('Please enter company name, select a logo, and add at least one employee.');
+            }
+        }
+    </script>
+</body>
+</html>
