@@ -10,11 +10,85 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        #profile {
+            display: flex;
+            align-items: center;
+        }
+
+        #profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        #links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            background-color: #333;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        #hamburger:hover #links {
+            display: flex;
+        }
+
+        #links a {
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <p>First Name: <span id="firstnametxt"></span></p>
-    <p>Last Name: <span id="lastnametxt"></span></p>
-    <p>Role: <span id="roletxt"></span></p>
+    <header>
+        <div id="profile">
+            <img src="" alt="Profile Image">
+            <div>
+                <p><span id="firstnametxt"></span>
+                <span id="lastnametxt"></span></p>
+                <p><span id="roletxt"></span></p>
+            </div>
+        </div>
+        <div id="hamburger">
+            <img src="bricon.png" alt="Hamburger Icon" width="32px">
+            <div id="links">
+                <a href="company.html">Create company</a>
+                <a href="#"></a>
+                <a href="#"></a>
+            </div>
+        </div>
+    </header>
+
 
     <script src="script.js"></script>
 </body>
