@@ -7,18 +7,3 @@ body{
 .center { width: 900px; 
     margin: 200px auto 0px auto; 
 }
-
-.left {
-    width: 60%;
-    background-color: #ffffff; 
-}
-
-.right {
-    width: 40%;
-    background-color: #3498db; 
-}
-
-.logo {
-    text-align: center; /* Center the content horizontally */
-    padding: 20px;
-}
