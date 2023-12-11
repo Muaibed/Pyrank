@@ -10,35 +10,42 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
     
-    <!--Adding Bootstrap-->    
+    <!-- Adding Bootstrap -->    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    
     <title>Login</title>
     <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=YourSelectedFont&display=swap">
 </head>
 <body>
+
+    <!-- Company Title and Logo -->
+    <div class="company-header">
+        <img src="pyrankLogo.png" alt="Company Logo" class="company-logo">
+        <h1 class="company-title" style="margin-bottom: -45px;">Pyrank</h1>
+    </div>
 
     <div class="left">
         <div class="col-4 center">
             <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="text" class="form-control shadow-sm" id="txtEmail" name="email">
+                <label for="email">Email:</label>
+                <input type="text" class="form-control shadow-sm" id="txtEmail" name="email">
             </div>
             <div class="form-group">
-              <label for="pwd">Password:</label>
-              <input type="password" class="form-control shadow-sm" id="txtPassword" name="password">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control shadow-sm" id="txtPassword" name="password">
             </div>
-  
-              <button type="submit" class="btn btn-primary shadow" id="btnLogin">Login</button>    
+
+            <button type="submit" class="btn btn-primary shadow" id="btnLogin">Log in</button>  
+            
+            <p>If you don't have an account, <a href="signup.html">Sign Up</a></p>
         </div>
     </div>
-    <div class="right">
-    </div>
+    <div class="right"></div>
           
-<script src="login.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>
