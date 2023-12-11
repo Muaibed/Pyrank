@@ -32,7 +32,7 @@
             align-items: center;
         }
 
-        #profile img {
+        #profile-img {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -54,6 +54,30 @@
             display: flex;
         }
 
+        #profile-options {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 10px;
+            background-color: #333;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        #profile-options a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #profile-options span, img {
+            vertical-align: middle;
+        }
+
+        #profile:hover #profile-options {
+            display: flex;
+        }
+
         #links a {
             color: #fff;
             text-decoration: none;
@@ -67,18 +91,76 @@
         p {
             margin: 10px 0;
         }
+       
+        .container {
+            max-width: 800px;
+            margin: 15px auto;
+            display: flex;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column,
+        .right-column {
+            padding: 20px;
+            flex: 1;
+        }
+
+        #companyName,
+        #companyID,
+        #companyDescription,
+        #empList {
+            display: block;
+        }
+        
+        #companyDescription{
+            margin-top: -20px;
+            font-size: smaller;
+        }
+
+        #addProjectLink {
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 101px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        #addProjectLink:hover{
+            background-color: #555;
+            transition: 0.5s;
+        }
+              
+        #projects {
+            display: block;
+        }
+        
+        #companyID {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <header>
         <div id="profile">
-            <img src="" alt="Profile Image">
+            <img src="" alt="Profile Image" id="profile-img">
+            <div id="profile-options">
+                <div id="sign-out">
+                    <a href="login.html">
+                        <span>Sign out</span>
+                        <img src="assets/sign-out.png" alt="Sign out" width="25px">
+                    </a> 
+                </div>
+            </div>
             <div>
                 <p><span id="firstnametxt"></span>
                 <span id="lastnametxt"></span></p>
                 <p><span id="roletxt"></span></p>
             </div>
         </div>
+        
         <div id="hamburger">
             <img src="assets/bricon.png" alt="Hamburger Icon" width="32px">
             <div id="links">
@@ -88,7 +170,21 @@
             </div>
         </div>
     </header>
-
+    
+    
+    <div class="container">
+        <div class="left-column">
+            <h3><span id="companyName"></span></h3>
+            <p><span id="companyDescription"></span></p>
+            <p><span id="empList">Employees List<br></span></p>
+        </div>
+        <div class="right-column">
+            <h3><span id="companyID"></span></h3>
+            <a href="project.html" id="addProjectLink">Create project</a>
+            <p><span id="projects">Projects</span></p>
+        </div>
+    </div>
+    
 
     <script src="script.js"></script>
 </body>

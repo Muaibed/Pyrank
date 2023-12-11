@@ -16,7 +16,40 @@ auth.onAuthStateChanged(user => {
 
     // Retrieve user data from Firestore
     const userDocRef = firestore.collection('users').doc(uid);
+    const companiesRef = firestore.collection("companies");
 
+    companiesRef.where("employees", "array-contains", uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log("Company:", doc.id, doc.data());
+          document.getElementById('companyName').innerHTML = doc.data().name;
+          document.getElementById('companyDescription').innerHTML = doc.data().description;
+          document.getElementById('companyID').innerHTML = doc.data().id;
+
+          // getting the employees
+          const dataArray = doc.data().employees;
+          dataArray.forEach((e) => {
+            const employeeRef = firestore.collection('users').doc(e);
+            employeeRef.get()
+            .then((doc) => {
+              if (doc.exists) {
+                document.getElementById('empList').innerHTML += doc.data().firstName + " " + doc.data().lastName + " " + doc.data().id + "<br>";
+              } else {
+                console.log('user not found');
+              }
+            })
+            .catch((error) => {
+              console.error('Error getting user:', error);
+            });
+            });
+        });
+      })
+      .catch((error) => {
+        console.error("Error getting companies:", error);
+      });
+
+    // Fetch user data
     userDocRef.get()
       .then(doc => {
         if (doc.exists) {
@@ -35,8 +68,22 @@ auth.onAuthStateChanged(user => {
       .catch(error => {
         console.error('Error getting user data:', error);
       });
+
   } else {
     // No user is signed in
     console.log('No user is signed in.');
+    document.getElementById('firstnametxt').textContent = 'guest';
   }
+
+  const btnSignOut = document.getElementById('sign-out');
+
+  btnSignOut.addEventListener('click', function (event) {
+    auth.signOut()
+      .then(() => {
+        console.log("User signed out");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  });
 });
