@@ -62,7 +62,7 @@
         }
 
         button {
-            background-color: #4caf50;
+            background-color:  #333;
             color: white;
             padding: 10px 15px;
             border: none;
@@ -71,8 +71,10 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #555;
+            transition: 0.5s;
         }
+        
     </style>
 </head>
 <body>
@@ -93,100 +95,149 @@
 
         <!-- Add Employee Section -->
         <h2>Add Employees</h2>
-        <label for="employee-name">Employee Name:</label>
-        <input type="text" id="employee-name" placeholder="Enter employee name">
-        <button onclick="addEmployee()">Add Employee</button>
+        <label for="employee-id">Employee ID:</label>
+        <input type="text" id="employee-id" placeholder="Enter employee ID">
+        <!-- <button onclick="addEmployee()">Add Employee</button> -->
+        <button type="submit" class="btn btn-primary shadow" id="btnAddEmployee">Add Employee</button>
+
 
         <!-- Display Company Employees -->
         <h2>Company Employees</h2>
         <ul id="employee-list"></ul>
 
         <!-- Submit Button -->
-        <button onclick="submitCompany()">Submit</button>
+        <button type="submit" class="btn btn-primary shadow" id="btnSubmitCompany">Submit</button>
     </div>
 
     <!-- Firebase Configuration -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage.js"></script> -->
 
     <script>
         // Replace with your Firebase configuration
+        (function () {
         const firebaseConfig = {
             apiKey: "AIzaSyAHXbGjCTkH5X-N9T20s7PEhiZwUmGYt6A",
             projectId: "pyrank-7e5de",
-            authDomain: "pyrank-7e5de.firebaseapp.com",
-            databaseURL: "https://pyrank-7e5de-default-rtdb.firebaseio.com",
-            storageBucket: "pyrank-7e5de.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        const firestore = firebase.firestore();
+        // const storage = firebase.storage();
 
-        // Function to add an employee to the list
-        function addEmployee() {
-            const employeeName = document.getElementById('employee-name').value;
+        var employees = [];
+
+        // to add an employee to the list
+        const btnAddEmployee = document.getElementById("btnAddEmployee");
+
+        btnAddEmployee.addEventListener('click', e => {
+            const employeeID = document.getElementById('employee-id').value;
             const employeeList = document.getElementById('employee-list');
-
-            if (employeeName) {
+            if (employeeID) {
                 const listItem = document.createElement('li');
-                listItem.textContent = employeeName;
-                employeeList.appendChild(listItem);
+                listItem.textContent = employeeID;
+
+                const usersCollection = firestore.collection('users');
+
+                usersCollection.where('id', '==', employeeID)
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((userDoc) => {
+                            // Access data from the order document
+                            const userId = userDoc.id;
+                            const userData = userDoc.data();
+                            listItem.textContent = userData.firstName + " " + userData.lastName
+                            employeeList.appendChild(listItem);
+                            employees.push(userId);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error getting orders: ", error);
+                    });
 
                 // Reset the employee name input field
-                document.getElementById('employee-name').value = '';
+                document.getElementById('employee-id').value = '';
             } else {
-                alert('Please enter an employee name.');
+                alert('Please enter an employee ID.');
             }
-        }
+        });
 
         // Function to submit company information to the database
-        function submitCompany() {
+        const btnSubmitCompany = document.getElementById("btnSubmitCompany");
+
+        btnSubmitCompany.addEventListener('click', e => {
             const companyName = document.getElementById('company-name').value;
+            const companyID = document.getElementById('company-id').value;
+            const description = document.getElementById('company-desc').value;
             const logoInput = document.getElementById('company-logo');
             const logoFile = logoInput.files[0];
             const employeeListItems = document.getElementById('employee-list').getElementsByTagName('li');
 
             if (companyName && logoFile && employeeListItems.length > 0) {
-                const storageRef = firebase.storage().ref(`company-logos/${logoFile.name}`);
-                const databaseRef = firebase.database().ref('companies');
-
+                
+                // const storageRef = firebase.storage().ref(`company-logos/${logoFile.name}`);
+                // const databaseRef = firebase.database().ref('companies');
+                
+                const companyCollection = firestore.collection('companies');
+                
                 // Upload logo to storage
-                storageRef.put(logoFile).then((snapshot) => {
-                    // Get the download URL for the logo
-                    snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        // Save company information to the database
-                        const companyData = {
-                            name: companyName,
-                            logo: downloadURL,
-                            employees: []
-                        };
+                // storageRef.put(logoFile).then((snapshot) => {
+                    //     // Get the download URL for the logo
+                    //     snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        //         // Save company information to the database
+                        //         const companyData = {
+                            //             name: companyName,
+                            //             // logo: downloadURL,
+                            //             id: companyID,
+                            //             description: description,
+                            //             employees: []
+                            //         };
+                            
+                            const companyData = {
+                                name: companyName,
+                                logo: " ",
+                                id: companyID,
+                                description: description,
+                                employees: employees
+                            };
+                            
+                            const user = firebase.auth().currentUser;
+                            if (user) {  
+                                companyCollection.add(companyData)
+                                .then((docRef) => {
+                                    console.log('Document added with ID: ', docRef.id);
+                                })
+                                .catch((error) => {
+                                    console.error('Error adding document: ', error);
+                                });
 
-                        // Add employees to the company data
-                        for (let i = 0; i < employeeListItems.length; i++) {
-                            companyData.employees.push(employeeListItems[i].textContent);
-                        }
-
-                        databaseRef.push(companyData);
+                            }
+                            
+                            
+                        // databaseRef.push(companyData);
 
                         // Reset form fields
                         document.getElementById('company-name').value = '';
                         logoInput.value = '';
-                        document.getElementById('preview').src = '';
+                        document.getElementById('company-id').value = '';
+                        document.getElementById('company-desc').value = '';
                         document.getElementById('employee-list').innerHTML = '';
-                        document.getElementById('employee-name').value = '';
+                        // document.getElementById('employee-name').value = '';
 
                         alert('Company information submitted successfully!');
 
                         // Redirect to the main page (index.html)
                         window.location.replace = 'index.html';
-                    });
-                });
-            } else {
-                alert('Please enter company name, select a logo, and add at least one employee.');
-            }
-        }
+                    
+                } else {
+                    alert('Please enter company name, select a logo, and add at least one employee.');
+                }
+            });
+        }());
     </script>
 </body>
 </html>

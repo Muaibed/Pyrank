@@ -67,6 +67,55 @@
         p {
             margin: 10px 0;
         }
+       
+        .container {
+            max-width: 800px;
+            margin: 15px auto;
+            display: flex;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column,
+        .right-column {
+            padding: 20px;
+            flex: 1;
+        }
+
+        #companyName,
+        #companyID,
+        #companyDescription,
+        #empList {
+            display: block;
+        }
+        
+        #companyDescription{
+            margin-top: -20px;
+            font-size: smaller;
+        }
+
+        #addProjectLink {
+            display: inline-block;
+            text-decoration: none;
+            padding: 8px 101px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        #addProjectLink:hover{
+            background-color: #555;
+            transition: 0.5s;
+        }
+              
+        #projects {
+            display: block;
+        }
+        
+        #companyID {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -79,8 +128,9 @@
                 <p><span id="roletxt"></span></p>
             </div>
         </div>
+        
         <div id="hamburger">
-            <img src="bricon.png" alt="Hamburger Icon" width="32px">
+            <img src="assets/bricon.png" alt="Hamburger Icon" width="32px">
             <div id="links">
                 <a href="company.html">Create company</a>
                 <a href="#"></a>
@@ -88,7 +138,21 @@
             </div>
         </div>
     </header>
-
+    
+    
+    <div class="container">
+        <div class="left-column">
+            <h3><span id="companyName">Company name</span></h3>
+            <p><span id="companyDescription">Company description</span></p>
+            <p><span id="empList">Employees list</span></p>
+        </div>
+        <div class="right-column">
+            <h3><span id="companyID">Company ID</span></h3>
+            <a href="project.html" id="addProjectLink">Create project</a>
+            <p><span id="projects">Project list</span></p>
+        </div>
+    </div>
+    
 
     <script src="script.js"></script>
 </body>
