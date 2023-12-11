@@ -16,6 +16,19 @@ auth.onAuthStateChanged(user => {
 
     // Retrieve user data from Firestore
     const userDocRef = firestore.collection('users').doc(uid);
+    const companiesRef = firestore.collection("companies");
+
+    // Query the "members" subcollection for the specific user
+    companiesRef.where("employees", "array-contains", uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log("Company:", doc.id, doc.data());
+        });
+      })
+      .catch((error) => {
+        console.error("Error getting companies:", error);
+      });
 
     userDocRef.get()
       .then(doc => {
@@ -35,8 +48,22 @@ auth.onAuthStateChanged(user => {
       .catch(error => {
         console.error('Error getting user data:', error);
       });
-  } else {
-    // No user is signed in
-    console.log('No user is signed in.');
+     } else {
+      // No user is signed in
+      console.log('No user is signed in.');
+      document.getElementById('firstnametxt').textContent = 'guest';
+
   }
+
+  const btnSignOut = document.getElementById('sign-out');
+
+  btnSignOut.addEventListener('click', function(event) {
+        auth.signOut()
+      .then(() => {
+        console.log("User signed out");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  })
 });

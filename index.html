@@ -32,7 +32,7 @@
             align-items: center;
         }
 
-        #profile img {
+        #profile-img {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -54,6 +54,30 @@
             display: flex;
         }
 
+        #profile-options {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 10px;
+            background-color: #333;
+            padding: 10px;
+            z-index: 1;
+        }
+
+        #profile-options a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #profile-options span, img {
+            vertical-align: middle;
+        }
+
+        #profile:hover #profile-options {
+            display: flex;
+        }
+
         #links a {
             color: #fff;
             text-decoration: none;
@@ -72,7 +96,15 @@
 <body>
     <header>
         <div id="profile">
-            <img src="" alt="Profile Image">
+            <img src="" alt="Profile Image" id="profile-img">
+            <div id="profile-options">
+                <div id="sign-out">
+                    <a href="login.html">
+                        <span>Sign out</span>
+                        <img src="assets/sign-out.png" alt="Sign out" width="25px">
+                    </a> 
+                </div>
+            </div>
             <div>
                 <p><span id="firstnametxt"></span>
                 <span id="lastnametxt"></span></p>
@@ -88,6 +120,9 @@
             </div>
         </div>
     </header>
+    <div>
+        <ul id="companies-list"></ul>
+    </div>
 
 
     <script src="script.js"></script>

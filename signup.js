@@ -33,17 +33,23 @@ btnSignup.addEventListener('click', e => {
             email: user.email
         })
         .then(function() {
-          console.log("User added to Firestore successfully");
+          alert("User added successfully");
         })
         .catch(function(error) {
-          console.error("Error adding user to Firestore: ", error);
+          alert("Error adding user: ", error);
         });
       })
       .catch(function (error) {
         // Handle errors during sign-up
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.error("Sign-up error:", errorMessage);
+        alert("Sign-up error:", errorMessage);
+        console.log(errorCode);
       });
-  });
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('id').value = '';
+      document.getElementById('txtPassword').value = '';
+      document.getElementById('txtEmail').value = '';
+    });
 }());
