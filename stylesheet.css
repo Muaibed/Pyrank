@@ -1,14 +1,54 @@
-body{
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-}
-.center { 
-    width: 900px; 
-    margin: 200px auto 0px auto; 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+body {
+    background-color: #333;
+    color: white;
+    font-family: 'YourSelectedFont', sans-serif;
 }
 
+.company-header {
+    text-align: center;
+    padding: 20px;
+}
+
+.company-logo {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.company-title {
+    font-family: 'Dancing Script', cursive, sans-serif;;
+    font-size: 48px;
+    margin-top: 10px;
+    color: #fff;
+}
+
+.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.center {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #007BFF;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.shadow-sm {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 #btnLogin {
     width: 450px;
     margin-top: 50px;
@@ -18,4 +58,3 @@ body{
     width: 450px;
     margin-top: 50px;
 }
-

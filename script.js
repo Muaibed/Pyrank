@@ -25,7 +25,10 @@ auth.onAuthStateChanged(user => {
           console.log("Company:", doc.id, doc.data());
           document.getElementById('companyName').innerHTML = doc.data().name;
           document.getElementById('companyDescription').innerHTML = doc.data().description;
-          document.getElementById('companyID').innerHTML = doc.data().id;
+          document.getElementById('companyID').innerHTML = "#"+ doc.data().id;
+          // document.getElementById('logo').innerHTML = doc.data().logo;
+          // document.getElementById('projects').innerHTML = doc.data().projects;
+
 
           // getting the employees
           const dataArray = doc.data().employees;
@@ -34,7 +37,7 @@ auth.onAuthStateChanged(user => {
             employeeRef.get()
             .then((doc) => {
               if (doc.exists) {
-                document.getElementById('empList').innerHTML += doc.data().firstName + " " + doc.data().lastName + " " + doc.data().id + "<br>";
+                document.getElementById('empList').innerHTML += doc.data().firstName + " " + doc.data().id + "<br>";
               } else {
                 console.log('user not found');
               }
