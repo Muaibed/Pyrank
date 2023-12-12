@@ -4,6 +4,18 @@ body{
     height: 100vh;
     display: flex;
 }
-.center { width: 900px; 
+.center { 
+    width: 900px; 
     margin: 200px auto 0px auto; 
 }
+
+#btnLogin {
+    width: 450px;
+    margin-top: 50px;
+}
+
+#btnSignup {
+    width: 450px;
+    margin-top: 50px;
+}
+
