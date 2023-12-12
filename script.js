@@ -1,13 +1,15 @@
 var firebaseConfig = {
   apiKey: "AIzaSyAHXbGjCTkH5X-N9T20s7PEhiZwUmGYt6A",
   projectId: "pyrank-7e5de",
+  storageBucket: 'gs://pyrank-7e5de.appspot.com',
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
-
+const storage = firebase.storage();
 
 // Listen for authentication state changes
 auth.onAuthStateChanged(user => {
@@ -23,7 +25,9 @@ auth.onAuthStateChanged(user => {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+
           console.log("Company:", doc.id, doc.data());
+          document.getElementById('companyLogo').src = `${doc.data().logo}`;              
           document.getElementById('companyName').innerHTML = doc.data().name;
           document.getElementById('companyDescription').innerHTML = doc.data().description;
           document.getElementById('companyID').innerHTML = doc.data().id;
@@ -75,6 +79,8 @@ auth.onAuthStateChanged(user => {
           document.getElementById('firstnametxt').textContent = userData.firstName || 'N/A';
           document.getElementById('lastnametxt').textContent = userData.lastName || 'N/A';
           document.getElementById('roletxt').textContent = userData.role || 'N/A';
+          document.getElementById('profile-img').src = `${userData.image}`;              
+
 
         } else {
           console.log('User document not found.');
@@ -108,6 +114,12 @@ auth.onAuthStateChanged(user => {
       const companyId = document.getElementById('companyID').innerHTML;
     
       window.location.href = `project.html?companyId=${companyId}`;
+    });
+
+    const btnChangeImage = document.getElementById('change-image');
+
+    btnChangeImage.addEventListener('click', function(event) {
+        window.open('changeImagePopUp.html', 'Change image', 'width=600,height=400')
     });
   });
   

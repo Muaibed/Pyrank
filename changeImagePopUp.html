@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="Profile-image">Profile Image<br></label>
+    <input type="file" id="profile-image" accept=".png, .jpg, .jpeg">
+    <button type="submit" class="btn btn-primary shadow" id="btnChangeImage">Save</button>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-storage.js"></script>
+<script>
+    (function () {
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHXbGjCTkH5X-N9T20s7PEhiZwUmGYt6A",
+            projectId: "pyrank-7e5de",
+            storageBucket: 'gs://pyrank-7e5de.appspot.com',
+
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const firestore = firebase.firestore();
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+
+        const btnChangeImage = document.getElementById('btnChangeImage');
+
+        btnChangeImage.addEventListener('click', e => {
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    const uid = user.uid;
+    
+                    // Retrieve user data from Firestore
+                    const userDocRef = firestore.collection('users').doc(uid);
+                    const imageInput = document.getElementById('profile-image');
+                    const imageFile = imageInput.files[0];
+
+                    const fileId = generateUniqueId();
+                    const fileRef = storageRef.child(`company-logos/${fileId}`);
+
+                    if (imageFile)
+                        fileRef.put(imageFile)
+                        .then((snapshot) => {
+                            console.log('File uploaded successfully!');
+
+                            return snapshot.ref.getDownloadURL();
+                        })
+                        .then((getDownloadURL) => {
+                            return userDocRef.update({
+                                image: getDownloadURL,
+                                })
+                            
+                        })
+                        .catch((error) => {
+                            console.error('Error uploading file:', error);
+                        });
+                    }})
+        })
+        }());
+        function generateUniqueId() {
+                return new Date().getTime().toString();
+            }
+</script>
+</html>
