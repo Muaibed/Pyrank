@@ -8,12 +8,13 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+
 // Listen for authentication state changes
 auth.onAuthStateChanged(user => {
   if (user) {
     // User is signed in
     const uid = user.uid;
-
+    
     // Retrieve user data from Firestore
     const userDocRef = firestore.collection('users').doc(uid);
     const companiesRef = firestore.collection("companies");
@@ -25,10 +26,21 @@ auth.onAuthStateChanged(user => {
           console.log("Company:", doc.id, doc.data());
           document.getElementById('companyName').innerHTML = doc.data().name;
           document.getElementById('companyDescription').innerHTML = doc.data().description;
-          document.getElementById('companyID').innerHTML = "#"+ doc.data().id;
+          document.getElementById('companyID').innerHTML = doc.data().id;
           // document.getElementById('logo').innerHTML = doc.data().logo;
           // document.getElementById('projects').innerHTML = doc.data().projects;
 
+          const projectsRef = firestore.collection('projects');
+          projectsRef.where('company', '==', doc.id)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((projectDoc) => {
+            if (projectDoc.exists) {
+              document.getElementById('projects').innerHTML += projectDoc.data().name + "<br>"
+            }
+          });
+        });
+          
 
           // getting the employees
           const dataArray = doc.data().employees;
@@ -45,20 +57,20 @@ auth.onAuthStateChanged(user => {
             .catch((error) => {
               console.error('Error getting user:', error);
             });
-            });
+          });
         });
       })
       .catch((error) => {
         console.error("Error getting companies:", error);
       });
 
-    // Fetch user data
-    userDocRef.get()
+      // Fetch user data
+      userDocRef.get()
       .then(doc => {
         if (doc.exists) {
           // Get user data
           const userData = doc.data();
-
+          
           // Update HTML elements with user data
           document.getElementById('firstnametxt').textContent = userData.firstName || 'N/A';
           document.getElementById('lastnametxt').textContent = userData.lastName || 'N/A';
@@ -72,14 +84,14 @@ auth.onAuthStateChanged(user => {
         console.error('Error getting user data:', error);
       });
 
-  } else {
+    } else {
     // No user is signed in
     console.log('No user is signed in.');
     document.getElementById('firstnametxt').textContent = 'guest';
   }
-
+  
   const btnSignOut = document.getElementById('sign-out');
-
+  
   btnSignOut.addEventListener('click', function (event) {
     auth.signOut()
       .then(() => {
@@ -88,5 +100,14 @@ auth.onAuthStateChanged(user => {
       .catch((error) => {
         console.error("Error signing out:", error);
       });
+    });
+    const createProject = document.getElementById('createProject');
+    
+    createProject.addEventListener('click', function(event) {
+      // Retrieve the company ID from the data attribute
+      const companyId = document.getElementById('companyID').innerHTML;
+    
+      window.location.href = `project.html?companyId=${companyId}`;
+    });
   });
-});
+  

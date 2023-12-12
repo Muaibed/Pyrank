@@ -30,7 +30,8 @@ btnSignup.addEventListener('click', e => {
             lastName: lastName,
             id: id,
             role: role,
-            email: user.email
+            email: user.email,
+            isJobless: true
         })
         .then(function() {
           console.log("User added to Firestore successfully");

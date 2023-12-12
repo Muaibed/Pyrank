@@ -149,9 +149,18 @@
                             // Access data from the order document
                             const userId = userDoc.id;
                             const userData = userDoc.data();
-                            listItem.textContent = userData.firstName + " " + userData.lastName
-                            employeeList.appendChild(listItem);
-                            employees.push(userId);
+                            if (userData.isJobless) {
+                                listItem.textContent = userData.firstName + " " + userData.lastName
+                                employeeList.appendChild(listItem);
+                                employees.push(userId);
+
+                                // updating the field (isJobless)
+                                usersCollection.doc(userDoc.id).update({
+                                    isJobless: false,
+                                })
+                            }
+                            else 
+                                alert(userData.firstName + " " + userData.lastName + " already in a company!");
                         });
                     })
                     .catch((error) => {

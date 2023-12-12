@@ -119,7 +119,7 @@
             font-size: smaller;
         }
 
-        #addProjectLink {
+        #createProject {
             display: inline-block;
             text-decoration: none;
             padding: 8px 101px;
@@ -128,7 +128,7 @@
             border-radius: 5px;
             font-size: 12px;
         }
-        #addProjectLink:hover{
+        #createProject:hover{
             background-color: #555;
             transition: 0.5s;
         }
@@ -169,8 +169,8 @@
             <img src="assets/bricon.png" alt="Hamburger Icon" width="32px">
             <div id="links">
                 <a href="company.html">Create company</a>
-                <a href="login.html">Sign-out</a>
-                <a href="#"></a>
+                <a href="login.html"><span>Sign out</span>
+                    <img src="assets/sign-out.png" alt="Sign out" width="25px"></a>
             </div>
         </div>
     </header>
@@ -184,8 +184,8 @@
         </div>
         <div class="right-column">
             <h3><span id="companyID"></span></h3>
-            <a href="project.html" id="addProjectLink">Create project</a>
-            <p><span id="projects">Projects</span></p>
+            <button id="createProject">Create project</button>
+            <p><span id="projects">Projects<br></span></p>
         </div>
     </div>
     

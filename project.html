@@ -119,6 +119,31 @@
         const firestore = firebase.firestore();
         // const storage = firebase.storage();
 
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Retrieve the company ID from the query parameter
+        const companyId = getQueryParam('companyId');
+        var company;
+
+        // Fetch the company name from Firestore based on the company ID
+        firestore.collection('companies').where('id', '==', companyId)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((companyDoc) => {
+                    if (companyDoc.exists) {
+                        company = companyDoc.id;
+                    } else {
+                        console.log('Company not found');
+                    }
+                })
+            })
+        .catch((error) => {
+        console.error('Error getting company:', error);
+        });
+
         var employees = [];
 
         // to add an employee to the list
@@ -171,15 +196,15 @@
                 
                 // const storageRef = firebase.storage().ref(`company-logos/${logoFile.name}`);
                 // const databaseRef = firebase.database().ref('companies');
-                
                 const projectsCollection = firestore.collection('projects');
 
                         const projectData = {
                             name: projectName,
-                            logo: " ",
+                            document: " ",
                             id: projectID,
                             description: description,
-                            employees: employees
+                            employees: employees,
+                            company: company
                         };
                         
                         const user = firebase.auth().currentUser;
