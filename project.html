@@ -105,6 +105,7 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-storage.js"></script>
 
     <script>
         // Replace with your Firebase configuration
@@ -112,12 +113,15 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAHXbGjCTkH5X-N9T20s7PEhiZwUmGYt6A",
             projectId: "pyrank-7e5de",
+            storageBucket: 'gs://pyrank-7e5de.appspot.com',
+
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const firestore = firebase.firestore();
-        // const storage = firebase.storage();
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
 
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -200,28 +204,46 @@
 
                         const projectData = {
                             name: projectName,
-                            document: " ",
+                            document: "DocumentPath",
                             id: projectID,
                             description: description,
                             employees: employees,
                             company: company
                         };
-                        
+
+                        const fileId = generateUniqueId();
+
+                        const fileRef = storageRef.child(`project-documents/${fileId}`);
+
                         const user = firebase.auth().currentUser;
                         if (user) {  
                             projectsCollection.add(projectData)
-                            .then((docRef) => {
-                                console.log('Document added with ID: ', docRef.id);
+
+                            projectsCollection.where('id', '==', projectData.id)
+                            .get()
+                            .then((querySnapshot) => {
+                                querySnapshot.forEach((projectDoc) => {
+            
+                                if (projectDoc.exists) {
+                                    // Upload the file
+                                    fileRef.put(docFile)
+                                    .then((snapshot) => {
+                                        console.log('File uploaded successfully!');
+
+                                        return snapshot.ref.getDownloadURL();
+                                    })
+                                    .then((getDownloadURL) => {
+                                        return projectDoc.ref.update({
+                                            document: getDownloadURL,
+                                            })
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error uploading file:', error);
+                                    });
+                                }
                             })
-                            .catch((error) => {
-                                console.error('Error adding document: ', error);
-                            });
-
-                        }
-                            
-                            
-                        // databaseRef.push(companyData);
-
+                        }); 
+                         
                         // Reset form fields
                         document.getElementById('project-name').value = '';
                         docInput.value = '';
@@ -237,8 +259,12 @@
                 } else {
                     alert('Please enter company name, select a logo, and add at least one employee.');
                 }
-            });
+            }
+            })
         }());
+        function generateUniqueId() {
+                return new Date().getTime().toString();
+            }
     </script>
 </body>
 </html>

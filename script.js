@@ -21,6 +21,9 @@ auth.onAuthStateChanged(user => {
     const userDocRef = firestore.collection('users').doc(uid);
     const companiesRef = firestore.collection("companies");
 
+    const empList = document.getElementById('empList');
+    const projectsList = document.getElementById('projectsList');
+
     companiesRef.where("employees", "array-contains", uid)
       .get()
       .then((querySnapshot) => {
@@ -40,7 +43,14 @@ auth.onAuthStateChanged(user => {
           .then((querySnapshot) => {
             querySnapshot.forEach((projectDoc) => {
             if (projectDoc.exists) {
-              document.getElementById('projects').innerHTML += projectDoc.data().name + "<br>"
+              var listItem = document.createElement("li");
+              var link = document.createElement("a");
+              link.href = `PRJP-M.html?projectId=${projectDoc.data().id}`; 
+              var linkText = document.createTextNode(projectDoc.data().name);
+              link.appendChild(linkText);
+              listItem.appendChild(link);
+
+              projectsList.appendChild(listItem);
             }
           });
         });
@@ -53,7 +63,14 @@ auth.onAuthStateChanged(user => {
             employeeRef.get()
             .then((doc) => {
               if (doc.exists) {
-                document.getElementById('empList').innerHTML += doc.data().firstName + " " + doc.data().id + "<br>";
+                var listItem = document.createElement("li");
+                var link = document.createElement("a");
+                link.href = "#"; 
+                var linkText = document.createTextNode(doc.data().firstName + " " + doc.data().lastName + " " + doc.data().id);
+                link.appendChild(linkText);
+                listItem.appendChild(link);
+
+                empList.appendChild(listItem);
               } else {
                 console.log('user not found');
               }

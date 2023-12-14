@@ -142,6 +142,11 @@
         #companyID {
             display: inline-block;
         }
+
+        #projectsList a, #empList a {
+            text-decoration: none;
+            color: #033859;
+        }
     </style>
 </head>
 <body>
@@ -180,12 +185,14 @@
             <img src="" alt="Company Logo" id="companyLogo" style="width: 50px;">
             <h3><span id="companyName"></span></h3>
             <p><span id="companyDescription"></span></p>
-            <p><span id="empList">Employees List<br></span></p>
+            <p><span>Employees List<br></span></p>
+            <ul id="empList"></ul>
         </div>
         <div class="right-column">
             <h3><span id="companyID"></span></h3>
             <button id="createProject">Create project</button>
-            <p><span id="projects">Projects<br></span></p>
+            <p><span>Projects<br></span></p>
+            <ul id="projectsList"></ul>
         </div>
     </div>
     
