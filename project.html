@@ -9,12 +9,13 @@
             font-family: 'Arial', sans-serif;
             margin: 20px;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #D99379;
         }
 
-        h1, h2 {
-            color: #333;
+        h1, h2, h3 {
             text-align: center;
+            color: #333;
+            padding: 20px;
         }
 
         label {
@@ -29,6 +30,12 @@
             margin-top: 5px;
             margin-bottom: 15px;
             box-sizing: border-box;
+        }
+
+        input[type="text"], input[type="file"]:hover {
+            border: 2px solid #426A8C;
+            transition: 1s;
+            border-radius: 45px;
         }
 
         
@@ -93,7 +100,7 @@
         <button type="submit" class="btn btn-primary shadow" id="btnAddEmployee">Add Employee</button>
 
         <!-- Display Project Employees -->
-        <h2>Project Employees</h2>
+        <h3>Project Employees</h3>
         <ul id="employee-list"></ul>
 
         <!-- Submit Button -->
