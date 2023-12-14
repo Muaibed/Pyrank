@@ -12,9 +12,11 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-storage.js"></script>
 
-
     <style>
         body {
+            background:  url("assets/ceilingBG.jpg");
+            background-size: cover;
+            
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -22,11 +24,23 @@
 
         header {
             display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: space-between;
             padding: 15px;
-            background-color: #333;
+            background-image: linear-gradient(to right, #F27F3D,white, #426A8C);
+            /*background-color: #F27F3D;*/
             color: #fff;
+        }
+
+        #pyrank {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            background-color: transparent;
+            border-radius: 1000px;
         }
 
         #profile {
@@ -165,8 +179,8 @@
                 <span id="EmpRate"></span></p>
             </div>
         </div>
-        <div id="pyrank" style="position: absolute; top: 16px; right: 594px; ">
-            <img src="assets/pyrankLogo.png" alt="pyrank-icon" width="80px">
+        <div id="pyrank"><!-- style="position: absolute; top: 16px; right: 600; ">-->
+            <img src="assets/pyrank logo no BG.png" alt="pyrank-icon" width="100px">
         </div>
         
         <div id="hamburger">
