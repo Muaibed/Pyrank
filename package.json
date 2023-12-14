@@ -1,0 +1,9 @@
+{
+    "name": "pyrank",
+    "version": "1.0.0",
+    "description": "Pyrank serves as a comprehensive solution for managers seeking efficient company profile management and streamlined project tracking. The platform empowers managers to create and maintain detailed profiles for their companies, highlighting key aspects such as the company's mission, vision, values, and team structure.",
+    "main": "login.js",
+    "scripts": {
+      "start": "node login.js"
+    }
+  }
