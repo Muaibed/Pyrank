@@ -257,31 +257,42 @@
                                                 empDoc.ref.update({
                                                     rate: rating,
                                                 })
-                                            } else {
+
+                                            } else if (rating != '') {
                                                 alert('The rating should be from 0 to 5!')
                                             }
 
                                             projecDoc.ref.update({
                                                 employees: projectEmployees
                                             })
-                                            
-                                            initializeEmployees()
+                                
+                                        }
+                                        else if (empDoc.data().id == id && projectEmployees.includes(`${empDoc.id}`)) {
+                                            if (isValidFloat(rating)) {
+                                                empDoc.ref.update({
+                                                    rate: rating,
+                                                })
 
-                                            IDInput.value = '';
-                                            ratingInput.value = '';
+                                            } else if (rating != '') {
+                                                alert('The rating should be from 0 to 5!')
+                                            }
                                         }
                                     }
                                     else 
                                     console.log('not exist')
                             })
                         }) 
-                            } else {
-                            console.log('Document not found');
-                            }
-                        })
+                    } else {
+                        console.log('Document not found');
                     }
                 })
-            })
+            }
+        })
+    })
+                initializeEmployees()
+
+                    IDInput.value = '';
+                    ratingInput.value = '';
 
             // if (isValidName(name) && isValidFloat(rating)) {
             //     const newRow = document.createElement('tr');
@@ -310,11 +321,40 @@
         // Event listener to delete the selected row
         deleteRowButton.addEventListener('click', function () {
             if (selectedRow) {
-                employeeTableBody.removeChild(selectedRow);
-                selectedRow = null; // Clear the selected row
-            }
-        });
 
+                firestore.collection('projects').where('id', '==', projectId)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((projecDoc) => {
+                        if (projectDoc.exists) {
+                        
+                        const dataArray = projectDoc.data().employees;
+                        dataArray.forEach((e) => {
+                            const employeeRef = firestore.collection('users').doc(e);
+                            employeeRef
+                            .onSnapshot((doc) => {
+                            if (doc.exists && doc.data().id == selectedRow.id) {
+
+                                var indexToRemove = dataArray.indexOf(doc.id);
+                                if (indexToRemove !== -1) 
+                                    dataArray.splice(indexToRemove, 1);
+
+                                projecDoc.ref.update({
+                                    employees: dataArray,
+                                })
+
+                                console.log(selectedRow)
+                                employeeTableBody.removeChild(selectedRow);
+                                selectedRow = null; // Clear the selected row
+
+                            }
+                        })
+                    })
+                }
+            })
+        })
+    }
+});
         // Event listener to submit a new comment
         commentForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -360,15 +400,15 @@
             initializeDoc()
            
         }
-
+        var counter = 0
         // Event listener to replace the document when the button is clicked
         replaceDocumentButton.addEventListener('click', loadDocument);
 
         function initializeEmployees() {
             var elementsToDelete = document.querySelectorAll('.employeeName');
-
+        
             elementsToDelete.forEach(function(element) {
-                element.parentNode.removeChild(element);
+                employeeTableBody.removeChild(element);
             });
 
             firestore.collection('projects').where('id', '==', projectId)
@@ -376,16 +416,15 @@
                 .then((querySnapshot) => {
                     querySnapshot.forEach((projecDoc) => {
                         if (projectDoc.exists) {
-                        
-                        const dataArray = projectDoc.data().employees;
-                        console.log(dataArray)
-                        dataArray.forEach((e) => {
-                            const employeeRef = firestore.collection('users').doc(e);
-                            employeeRef
-                            .onSnapshot((doc) => {
-                            if (doc.exists) {
+                            const dataArray = projectDoc.data().employees;
+                            dataArray.forEach((e) => {
+                                const employeeRef = firestore.collection('users').doc(e);
+                                employeeRef
+                                .get().then((doc) => {
+                                if (doc.exists) {
                                 const newRow = document.createElement('tr');
                                 newRow.classList.add('employeeName');
+                                newRow.id = doc.data().id;
                                 newRow.innerHTML = `<td>${doc.data().firstName + " " + doc.data().lastName}</td><td>${doc.data().rate}</td>`;
                                 newRow.addEventListener('click', selectRow); 
                                 employeeTableBody.appendChild(newRow);
