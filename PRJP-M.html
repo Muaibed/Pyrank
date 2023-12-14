@@ -252,6 +252,7 @@
                                         var projectEmployees = projecDoc.data().employees;  
                                         if (empDoc.data().id == id && !projectEmployees.includes(`${empDoc.id}`)) {
                                             projectEmployees.push(empDoc.id)
+
                                             if (isValidFloat(rating)) {
                                                 empDoc.ref.update({
                                                     rate: rating,
@@ -259,9 +260,11 @@
                                             } else {
                                                 alert('The rating should be from 0 to 5!')
                                             }
+
                                             projecDoc.ref.update({
                                                 employees: projectEmployees
                                             })
+                                            
                                             initializeEmployees()
 
                                             IDInput.value = '';
